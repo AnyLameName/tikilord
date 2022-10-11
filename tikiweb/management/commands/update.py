@@ -44,10 +44,20 @@ class Command(BaseCommand):
         )
         return season
 
-    def update_leaderboard(self, region='US', page_count=25):
+    def update_leaderboard(self, region=None, page_count=20):
+        regions_to_fetch = []
+        if region is None:
+            regions_to_fetch = ['US', 'EU', 'AP']
+        else:
+            regions_to_fetch = [region]
+
+        for r in regions_to_fetch:
+            self._update_leaderboard(r, page_count)
+
+    def _update_leaderboard(self, region='US', page_count=20):
         base_url = 'https://hearthstone.blizzard.com/en-us/api/community/leaderboardsData?' \
                    'region={region}&leaderboardId=battlegrounds&page={page}'
-        self.stdout.write(f"Fetching top {page_count} pages for {region}")
+        self.stdout.write(f"{timezone.now()} - Fetching top {page_count} pages for {region}")
         pad_small = len(str(page_count))
         pad_large = pad_small + 3
         for i in range(page_count):
