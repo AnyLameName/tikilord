@@ -24,7 +24,54 @@ def top(request, region='US', player_count=25):
     return HttpResponse(template.render(context, request))
 
 
-def player(request, account_id):
+def top_chart(request, region='US', player_count=16):
+    # Make sure we only get data from the most recent season.
+    season_num = current_season()
+
+    # Top N final positions
+    topN = models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count,
+                                          season__region=region) \
+        .order_by('rank', '-timestamp').distinct('rank')
+
+    # Can't possibly be the best way to do this, but now get the full season data for those top 16 players.
+    data = {}
+    for entry in topN:
+        # List comprehension?
+
+        data[entry.player.account_id] = {
+            'ratings': [],
+            'time': [],
+        }
+        positions = models.Position.objects.filter(season__blizzard_id=season_num,
+                                                   season__region=region,
+                                                   player__account_id=entry.player.account_id)
+        for p in positions:
+            data[entry.player.account_id]['ratings'].append(p.rating)
+            data[entry.player.account_id]['time'].append(p.timestamp)
+
+    context = {
+        'region': region,
+        'player_count': player_count,
+    }
+    # Chart all the different players
+    plotter.clf()
+    plotter.title(f"Top {player_count} - {region}")
+    for player_name, player_data in data.items():
+        plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
+    # TODO: We need a unicode font for player names.
+    plotter.legend(bbox_to_anchor=(1.03, 1))
+
+    # Turn plot into image and encode for transit
+    file_obj = io.BytesIO()
+    plotter.savefig(file_obj, bbox_inches='tight')
+    b64 = base64.b64encode(file_obj.getvalue()).decode()
+    context['chart'] = b64
+
+    template = loader.get_template('tikiweb/top_chart.html')
+    return HttpResponse(template.render(context, request))
+
+
+def player_by_id(request, account_id):
     season_num = current_season()
     history = {}
     positions = models.Position.objects.filter(season__blizzard_id=season_num, player__account_id=account_id)\
@@ -53,7 +100,7 @@ def chart(request, account_id):
         'account_id': account_id,
     }
     positions = models.Position.objects.filter(season__blizzard_id=season_num, player__account_id=account_id) \
-        .order_by('-timestamp')
+        .order_by('timestamp')
 
     for position in positions:
         region = position.season.region

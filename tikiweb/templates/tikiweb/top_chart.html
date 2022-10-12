@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top {{ player_count }} Players - {{ region }}</title>
+</head>
+<body>
+{% if chart %}
+    <img src='data:image/png;base64,{{ chart }}'>
+{% else %}
+    <p>No data found for {{ region }}</p>
+{% endif %}
+</body>
+</html>
