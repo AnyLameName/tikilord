@@ -63,6 +63,7 @@ def chart(request, account_id):
         data[region]['time'].append(position.timestamp)
 
     for region, item in data.items():
+        plotter.clf()
         plotter.plot(item['time'], item['rating'], color='blue')
         plotter.title(f"{account_id} - Rating ({region}) v Time")
         plotter.xlabel('Time')
