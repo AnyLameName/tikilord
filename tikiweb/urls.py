@@ -7,4 +7,5 @@ urlpatterns = [
     path('region/<str:region>/', views.top, name='top_by_region'),
     path('region/<str:region>/count/<int:player_count>/', views.top, name='top_n'),
     path('player/<str:account_id>/', views.player, name='player'),
+    path('player/<str:account_id>/chart/', views.chart, name='chart')
 ]
