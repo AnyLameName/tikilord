@@ -57,20 +57,16 @@ class Command(BaseCommand):
     def _update_leaderboard(self, region='US', page_count=20):
         base_url = 'https://hearthstone.blizzard.com/en-us/api/community/leaderboardsData?' \
                    'region={region}&leaderboardId=battlegrounds&page={page}'
-        self.stdout.write(f"{timezone.now()} - Fetching top {page_count} pages for {region}")
-        pad_small = len(str(page_count))
-        pad_large = pad_small + 3
+        self.stdout.write(f"{timezone.now()} - Fetching top {page_count} pages for {region} - ", ending="")
         for i in range(page_count):
             page_number = i + 1
-            if page_number % 10 == 1:
-                self.stdout.write(f"Page {page_number: >{pad_small}}", ending="")
-                self.stdout.flush()
-            elif page_number % 10 == 0 or page_number == page_count:
-                self.stdout.write(f"{page_number:.>{pad_large}}")
+            if page_number == page_count:
+                self.stdout.write(f"{page_number}")
                 self.stdout.flush()
             else:
-                self.stdout.write(f"{page_number:.>{pad_large}}", ending="")
+                self.stdout.write(f"{page_number}...", ending="")
                 self.stdout.flush()
+            continue
 
             response = requests.get(base_url.format(region=region, page=page_number))
             response.raise_for_status()

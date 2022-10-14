@@ -2,7 +2,10 @@ from django.http import HttpResponse
 from django.template import loader
 from django.db.models import Max
 import matplotlib.pyplot as plotter
-import io, base64
+import matplotlib.dates as mpl_dates
+from matplotlib import font_manager
+import io
+import base64
 from . import models
 
 
@@ -56,10 +59,15 @@ def top_chart(request, region='US', player_count=16):
     # Chart all the different players
     plotter.clf()
     plotter.title(f"Top {player_count} - {region}")
+
+    font = font_manager.FontProperties(fname='/home/jgagnon/fonts/noto-sans/NotoSansCJKtc-Regular.otf')
+
     for player_name, player_data in data.items():
         plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
     # TODO: We need a unicode font for player names.
-    plotter.legend(bbox_to_anchor=(1.03, 1))
+    plotter.legend(bbox_to_anchor=(1.03, 1), prop=font)
+    plotter.xticks(rotation=-45)
+    plotter.gca().xaxis.set_major_formatter(mpl_dates.DateFormatter('%m-%d-%y'))
 
     # Turn plot into image and encode for transit
     file_obj = io.BytesIO()
