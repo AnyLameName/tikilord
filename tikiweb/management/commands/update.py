@@ -20,6 +20,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def process_row(row):
+        # TODO: Blizzard doesn't actually send us enough information to uniquely identify a player.
+        # We may need to use some statistics to differentiate duplicate names.
         player, created = models.Player.objects.get_or_create(account_id=row['accountid'])
 
         pos = models.Position()
@@ -30,12 +32,14 @@ class Command(BaseCommand):
 
         return pos
 
-    @staticmethod
-    def get_season(json):
+    def get_season(self, json):
         region = json['region']
         blizzard_id = json['seasonId']
         display_number = blizzard_id + 1
-        rating_id = json['seasonMetaData'][region]['battlegrounds']['ratingId']
+        try:
+            rating_id = json['seasonMetaData'][region]['battlegrounds']['ratingId']
+        except KeyError:
+            self.stdout.write("(Missing ratingId, moving on)", ending="")
 
         season, created = models.Season.objects.get_or_create(
             blizzard_id=blizzard_id,
