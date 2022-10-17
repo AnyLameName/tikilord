@@ -1,6 +1,5 @@
-from django.http import HttpResponse
-from django.template import loader
 from django.db.models import Max
+from django.shortcuts import render
 import matplotlib.pyplot as plotter
 import matplotlib.dates as mpl_dates
 from matplotlib import font_manager
@@ -20,11 +19,10 @@ def top(request, region='US', player_count=25):
 
     positions = models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count, season__region=region)\
         .order_by('rank', '-timestamp').distinct('rank')
-    template = loader.get_template('tikiweb/index.html')
     context = {
         'top': positions,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tikiweb/index.html', context)
 
 
 def top_chart(request, region='US', player_count=16):
@@ -32,13 +30,13 @@ def top_chart(request, region='US', player_count=16):
     season_num = current_season()
 
     # Top N final positions
-    topN = models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count,
+    top_n = models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count,
                                           season__region=region) \
         .order_by('rank', '-timestamp').distinct('rank')
 
     # Can't possibly be the best way to do this, but now get the full season data for those top 16 players.
     data = {}
-    for entry in topN:
+    for entry in top_n:
         # List comprehension?
 
         data[entry.player.account_id] = {
@@ -64,7 +62,6 @@ def top_chart(request, region='US', player_count=16):
 
     for player_name, player_data in data.items():
         plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
-    # TODO: We need a unicode font for player names.
     plotter.legend(bbox_to_anchor=(1.03, 1), prop=font)
     plotter.xticks(rotation=-45)
     plotter.gca().xaxis.set_major_formatter(mpl_dates.DateFormatter('%m-%d-%y'))
@@ -75,8 +72,7 @@ def top_chart(request, region='US', player_count=16):
     b64 = base64.b64encode(file_obj.getvalue()).decode()
     context['chart'] = b64
 
-    template = loader.get_template('tikiweb/top_chart.html')
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tikiweb/top_chart.html', context)
 
 
 def player_by_id(request, account_id):
@@ -91,12 +87,11 @@ def player_by_id(request, account_id):
             history[region] = []
         history[region].append(position)
 
-    template = loader.get_template('tikiweb/player.html')
     context = {
         'account_id': account_id,
         'history': history,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tikiweb/player.html', context)
 
 
 def chart(request, account_id):
@@ -131,5 +126,4 @@ def chart(request, account_id):
         b64 = base64.b64encode(file_obj.getvalue()).decode()
         context['charts'][region] = b64
 
-    template = loader.get_template('tikiweb/chart.html')
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tikiweb/chart.html', context)
