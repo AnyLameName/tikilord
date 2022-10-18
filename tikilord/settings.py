@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-awhy4+cmz)c=t&(!=k_8y2eg!01)7@_n=0+7a0bh9@xqih7&ez
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jgagnon-ubuntu', 'localhost']
+ALLOWED_HOSTS = ['jgagnon-nubuntu', 'localhost']
 
 
 # Application definition
