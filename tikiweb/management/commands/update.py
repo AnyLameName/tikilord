@@ -41,6 +41,7 @@ class Command(BaseCommand):
         region = json['region']
         blizzard_id = json['seasonId']
         display_number = blizzard_id + 1
+        rating_id = None
         try:
             rating_id = json['seasonMetaData'][region]['battlegrounds']['ratingId']
         except KeyError:
