@@ -13,10 +13,15 @@ class Command(BaseCommand):
             type=str,
             help='Which region to fetch. Choices: US, AP, EU'
         )
+        parser.add_argument(
+            '--skip-db',
+            action='store_true'
+        )
 
     def handle(self, *args, **options):
         region = options['region']
-        self.update_leaderboard(region=region)
+        skip_db = options['skip_db']
+        self.update_leaderboard(region=region, skip_db=skip_db)
 
     @staticmethod
     def process_row(row):
@@ -48,7 +53,7 @@ class Command(BaseCommand):
         )
         return season
 
-    def update_leaderboard(self, region=None, page_count=20):
+    def update_leaderboard(self, region=None, page_count=20, skip_db=False):
         regions_to_fetch = []
         if region is None:
             regions_to_fetch = ['US', 'EU', 'AP']
@@ -56,9 +61,9 @@ class Command(BaseCommand):
             regions_to_fetch = [region]
 
         for r in regions_to_fetch:
-            self._update_leaderboard(r, page_count)
+            self._update_leaderboard(r, page_count, skip_db)
 
-    def _update_leaderboard(self, region='US', page_count=20):
+    def _update_leaderboard(self, region='US', page_count=20, skip_db=False):
         base_url = 'https://hearthstone.blizzard.com/en-us/api/community/leaderboardsData?' \
                    'region={region}&leaderboardId=battlegrounds&page={page}'
         self.stdout.write(f"{timezone.now()} - Fetching top {page_count} pages for {region} - ", ending="")
@@ -70,7 +75,8 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f"{page_number}...", ending="")
                 self.stdout.flush()
-            continue
+            if skip_db:
+                continue
 
             response = requests.get(base_url.format(region=region, page=page_number))
             response.raise_for_status()
