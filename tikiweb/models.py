@@ -29,7 +29,7 @@ class Position(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     rank = models.IntegerField()
-    rating = models.IntegerField()
+    rating = models.IntegerField(blank=True, null=True)
     timestamp = models.DateTimeField()
 
     def __str__(self):
