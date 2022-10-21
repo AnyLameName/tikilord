@@ -62,13 +62,13 @@ def top_chart(request, region='US', player_count=16):
 
     for player_name, player_data in data.items():
         plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
-    plotter.legend(bbox_to_anchor=(1.03, 1), prop=font)
+    plotter.legend(bbox_to_anchor=(1.03, 1.02), prop=font)
     plotter.xticks(rotation=-45)
     plotter.gca().xaxis.set_major_formatter(mpl_dates.DateFormatter('%m-%d-%y'))
 
     # Turn plot into image and encode for transit
     file_obj = io.BytesIO()
-    plotter.savefig(file_obj, bbox_inches='tight')
+    plotter.savefig(file_obj, bbox_inches='tight', dpi=200)
     b64 = base64.b64encode(file_obj.getvalue()).decode()
     context['chart'] = b64
 
