@@ -14,6 +14,12 @@ class Command(BaseCommand):
             help='Which region to fetch. Choices: US, AP, EU'
         )
         parser.add_argument(
+            '--page-count',
+            type=int,
+            default=20,
+            help='How many pages to fetch. There are 25 players per page.'
+        )
+        parser.add_argument(
             '--skip-db',
             action='store_true'
         )
@@ -21,7 +27,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         region = options['region']
         skip_db = options['skip_db']
-        self.update_leaderboard(region=region, skip_db=skip_db)
+        page_count = options['page_count']
+        self.update_leaderboard(region=region, page_count=page_count, skip_db=skip_db)
 
     @staticmethod
     def process_row(row):
