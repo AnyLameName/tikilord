@@ -65,6 +65,7 @@ def top_chart(request, region='US', player_count=16):
     plotter.legend(bbox_to_anchor=(1.03, 1.02), prop=font)
     plotter.xticks(rotation=-45)
     plotter.gca().xaxis.set_major_formatter(mpl_dates.DateFormatter('%m-%d-%y'))
+    plotter.grid(linewidth=0.5, linestyle='--')
 
     # Turn plot into image and encode for transit
     file_obj = io.BytesIO()
