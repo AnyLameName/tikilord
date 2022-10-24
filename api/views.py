@@ -1,10 +1,12 @@
 from django.db.models import Max
 from django.shortcuts import render
+from django.http import HttpResponse
 import matplotlib.pyplot as plotter
 import matplotlib.dates as mpl_dates
 from matplotlib import font_manager
 import io
 import base64
+import json
 from . import models
 
 
@@ -17,12 +19,13 @@ def top(request, region='US', player_count=25):
     # Make sure we only get data from the most recent season.
     season_num = current_season()
 
-    positions = models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count, season__region=region)\
-        .order_by('rank', '-timestamp').distinct('rank')
-    context = {
-        'top': positions,
-    }
-    return render(request, 'tikiweb/index.html', context)
+    # TODO: This seems to produce valid JSON, but a proper serializer is definitely required.
+    # Look into django's rest_framework.
+    response = { 'top': [],}
+    for position in models.Position.objects.filter(season__blizzard_id=season_num, rank__lte=player_count, season__region=region)\
+        .order_by('rank', '-timestamp').distinct('rank'):
+        response['top'].append({'account_id': position.player.account_id, 'rank': position.rank, 'rating': position.rating})
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def top_chart(request, region='US', player_count=16):
@@ -73,7 +76,7 @@ def top_chart(request, region='US', player_count=16):
     b64 = base64.b64encode(file_obj.getvalue()).decode()
     context['chart'] = b64
 
-    return render(request, 'tikiweb/top_chart.html', context)
+    return render(request, 'api/top_chart.html', context)
 
 
 def player_by_id(request, account_id):
@@ -92,7 +95,7 @@ def player_by_id(request, account_id):
         'account_id': account_id,
         'history': history,
     }
-    return render(request, 'tikiweb/player.html', context)
+    return render(request, 'api/player.html', context)
 
 
 def chart(request, account_id):
@@ -127,4 +130,4 @@ def chart(request, account_id):
         b64 = base64.b64encode(file_obj.getvalue()).decode()
         context['charts'][region] = b64
 
-    return render(request, 'tikiweb/chart.html', context)
+    return render(request, 'api/chart.html', context)

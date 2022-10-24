@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
-from tikiweb import models
+from api import models
 import requests
 
 

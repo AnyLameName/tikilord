@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ['jgagnon-nubuntu', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'tikiweb.apps.TikiwebConfig',
+    'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
