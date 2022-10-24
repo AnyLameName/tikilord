@@ -37,7 +37,7 @@
         {% for position in top %}
             <tr>
                 <td>{{ position.rank }}</td>
-                <td><a href="/tikiweb/player/{{ position.player.account_id }}">{{ position.player.account_id }}</a></td>
+                <td><a href="/api/player/{{ position.player.account_id }}">{{ position.player.account_id }}</a></td>
                 <td>{{ position.rating }}</td>
             </tr>
         {% endfor %}

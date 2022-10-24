@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('tikiweb/', include('tikiweb.urls')),
+    path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
 ]

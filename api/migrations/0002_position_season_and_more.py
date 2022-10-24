@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tikiweb', '0001_initial'),
+        ('api', '0001_initial'),
     ]
 
     operations = [
@@ -46,11 +46,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='position',
             name='player',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tikiweb.player'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.player'),
         ),
         migrations.AddField(
             model_name='position',
             name='season',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tikiweb.season'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.season'),
         ),
     ]
