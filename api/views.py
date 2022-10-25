@@ -76,7 +76,9 @@ def top_chart(request, region='US', player_count=16):
     b64 = base64.b64encode(file_obj.getvalue()).decode()
     context['chart'] = b64
 
-    return render(request, 'api/top_chart.html', context)
+    #TODO: Once again, this works but should be properly serialized.
+    response = { 'img': b64}
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def player_by_id(request, account_id):
