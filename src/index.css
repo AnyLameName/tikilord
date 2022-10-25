@@ -2,3 +2,25 @@ body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
 }
+
+table.leaderboard {
+  border-collapse: collapse;
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+th.leaderboard, td.leaderboard {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+tr.leaderboard:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th.leaderboard {
+  text-align: left;
+  background-color: #578ade;
+  color: white;
+}
