@@ -14,11 +14,7 @@ const router = createBrowserRouter([
     element: <Leaderboard />,
   },
   {
-    path: '/region/:region/top/:playerCount/',
-    element: <Leaderboard />,
-  },
-  {
-    path: '/region/:region/top/:playerCount/chart/',
+    path: '/chart/',
     element: <TopChart />,
   }
 ]);

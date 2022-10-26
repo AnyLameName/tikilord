@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 class LeaderboardRow extends React.Component {
   render() {
@@ -22,12 +22,17 @@ class Leaderboard extends React.Component {
       error: null,
       isLoaded: false,
       positions: [],
-      region: props.region,
     };
   }
 
   componentDidMount() {
-    axios.get('http://jgagnon-nubuntu:9000/api/region/' + this.state.region + '/top/' + this.props.playerCount + '/')
+    axios.get('http://jgagnon-nubuntu:9000/api/leaderboard/', 
+              {
+                params: {
+                  region: this.props.region,
+                  playerCount: this.props.playerCount,
+                }
+              })
     .then(response => {
       // handle success
       this.setState({
@@ -46,7 +51,6 @@ class Leaderboard extends React.Component {
   }
 
   render() {
-    const status = (this.state.isLoaded && !this.state.error) ? 'We got data!' : 'We have no data.';
     return (
       <table className="leaderboard">
         <thead>
@@ -69,14 +73,9 @@ class Leaderboard extends React.Component {
 }
 
 export default function LeaderboardHook () {
-    let { region } = useParams();
-    if(region === undefined) {
-        region = 'US';
-    }
+  let [searchParams, _] = useSearchParams();
+  const region = searchParams.has('region') ? searchParams.get('region'): 'US';
+  const playerCount = searchParams.has('playerCount') ? parseInt(searchParams.get('playerCount')) : 25;
 
-    let { playerCount } = useParams();
-    if(playerCount === undefined) {
-        playerCount = 25;
-    }
-    return(<Leaderboard region={region} playerCount={playerCount}/>);
+  return(<Leaderboard region={region} playerCount={playerCount}/>);
 }

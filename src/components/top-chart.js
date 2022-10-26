@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 class TopChart extends React.Component {
   constructor(props) {
@@ -14,7 +14,13 @@ class TopChart extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://jgagnon-nubuntu:9000/api/region/' + this.state.region + '/top/' + this.props.playerCount + '/chart/')
+    axios.get('http://jgagnon-nubuntu:9000/api/chart/', 
+              {
+                params: {
+                  region: this.props.region,
+                  playerCount: this.props.playerCount,
+                }
+              })
     .then(response => {
       // handle success
       this.setState({
@@ -43,14 +49,9 @@ class TopChart extends React.Component {
   }
 }
 export default function TopChartHook () {
-    let { region } = useParams();
-    if(region === undefined) {
-        region = 'US';
-    }
+  let [searchParams, _] = useSearchParams();
+  const region = searchParams.has('region') ? searchParams.get('region'): 'US';
+  const playerCount = searchParams.has('playerCount') ? parseInt(searchParams.get('playerCount')) : 16;
 
-    let { playerCount } = useParams();
-    if(playerCount === undefined) {
-        playerCount = 25;
-    }
-    return(<TopChart region={region} playerCount={playerCount}/>);
+  return(<TopChart region={region} playerCount={playerCount}/>);
 }
