@@ -15,7 +15,9 @@ def current_season():
 
 
 # Create your views here.
-def top(request, region='US', player_count=25):
+def top(request):
+    region = request.GET.get('region', 'US')
+    player_count = request.GET.get('playerCount', 25)
     # Make sure we only get data from the most recent season.
     season_num = current_season()
 
@@ -28,7 +30,9 @@ def top(request, region='US', player_count=25):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-def top_chart(request, region='US', player_count=16):
+def top_chart(request):
+    region = request.GET.get('region', 'US')
+    player_count = request.GET.get('playerCount', 16)
     # Make sure we only get data from the most recent season.
     season_num = current_season()
 
