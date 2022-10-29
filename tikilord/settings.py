@@ -84,16 +84,19 @@ WSGI_APPLICATION = 'tikilord.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+with open(os.getenv('TIKILORD_DB_NAME'), 'r') as file: db_name = file.read().rstrip()
+with open(os.getenv('TIKILORD_DB_USER'), 'r') as file: db_user = file.read().rstrip()
+with open(os.getenv('TIKILORD_DB_PASS'), 'r') as file: db_pass = file.read().rstrip()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('TIKILORD_DB_NAME'),
-        'USER': os.getenv('TIKILORD_DB_USER'),
-        'PASSWORD': os.getenv('TIKILORD_DB_PASS'),
-        'HOST': os.getenv('TIKILORD_DB_HOST'),
+        'NAME': db_user,
+        'USER': db_name,
+        'PASSWORD': db_pass,
+        'HOST': 'db',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

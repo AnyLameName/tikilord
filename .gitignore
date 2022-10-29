@@ -1,5 +1,8 @@
 .env
 set-env.sh
+secrets
+data
+update.sh
 .idea
 __pycache__
 db.sqlite3

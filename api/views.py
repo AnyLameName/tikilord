@@ -65,7 +65,7 @@ def top_chart(request):
     plotter.clf()
     plotter.title(f"Top {player_count} - {region}")
 
-    font = font_manager.FontProperties(fname='/home/jgagnon/fonts/noto-sans/NotoSansCJKtc-Regular.otf')
+    font = font_manager.FontProperties(fname='/fonts/NotoSansCJKtc-Regular.otf')
 
     for player_name, player_data in data.items():
         plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
