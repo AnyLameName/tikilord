@@ -49,7 +49,7 @@ class TopChart extends React.Component {
   }
 }
 export default function TopChartHook () {
-  let [searchParams, _] = useSearchParams();
+  let searchParams = useSearchParams()[0];
   const region = searchParams.has('region') ? searchParams.get('region'): 'US';
   const playerCount = searchParams.has('playerCount') ? parseInt(searchParams.get('playerCount')) : 16;
 
