@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
-
-load_dotenv('/home/jgagnon/src/tikilord/.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,16 +84,19 @@ WSGI_APPLICATION = 'tikilord.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+with open(os.getenv('TIKILORD_DB_NAME'), 'r') as file: db_name = file.read().rstrip()
+with open(os.getenv('TIKILORD_DB_USER'), 'r') as file: db_user = file.read().rstrip()
+with open(os.getenv('TIKILORD_DB_PASS'), 'r') as file: db_pass = file.read().rstrip()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tikilord',
-        'USER': os.getenv('TIKILORD_DB_USER'),
-        'PASSWORD': os.getenv('TIKILORD_DB_PASS'),
-        'HOST': 'localhost'
+        'NAME': db_user,
+        'USER': db_name,
+        'PASSWORD': db_pass,
+        'HOST': 'db',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
