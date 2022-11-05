@@ -68,7 +68,7 @@ def top_chart(request):
     font = font_manager.FontProperties(fname='/fonts/NotoSansCJKtc-Regular.otf')
 
     for player_name, player_data in data.items():
-        plotter.plot(player_data['time'], player_data['ratings'], label=player_name)
+        plotter.plot(player_data['time'], player_data['ratings'], linewidth=1.0, label=player_name)
     plotter.legend(bbox_to_anchor=(1.03, 1.02), prop=font)
     plotter.xticks(rotation=-45)
     plotter.gca().xaxis.set_major_formatter(mpl_dates.DateFormatter('%m-%d-%y'))
