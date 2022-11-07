@@ -48,6 +48,7 @@ class TopChart extends React.Component {
     );
   }
 }
+
 export default function TopChartHook () {
   let searchParams = useSearchParams()[0];
   const region = searchParams.has('region') ? searchParams.get('region'): 'US';
