@@ -9,6 +9,10 @@ sudo dnf install poetry
 sudo dnf install moby-engine docker-compose  
 sudo systemctl enable docker  
 sudo systemctl start docker
+
+sudo dnf install npm
+cd tikiweb/
+npm install
 ```
 ## Set Up Secrets
 Create a secrets directory in the top level of the repository, with the following three files. Fill them in as appropriate for your database.
