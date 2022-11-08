@@ -14,7 +14,7 @@ class TopChart extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://jgagnon-nubuntu:9000/api/chart/', 
+    axios.get('http://hydro:9000/api/chart/', 
               {
                 params: {
                   region: this.props.region,

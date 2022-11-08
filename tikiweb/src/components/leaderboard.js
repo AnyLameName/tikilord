@@ -26,7 +26,7 @@ class Leaderboard extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://jgagnon-nubuntu:9000/api/leaderboard/', 
+    axios.get('http://hydro:9000/api/leaderboard/', 
               {
                 params: {
                   region: this.props.region,

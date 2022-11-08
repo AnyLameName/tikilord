@@ -30,6 +30,15 @@ services:
       - tiki-net
     depends_on:
       - db
+  web:
+    image: "tikiweb:latest"
+    tty: true
+    ports:
+      - "3000:3000"
+    networks:
+      - tiki-net
+    depends_on:
+      - django
 volumes:
   tikilord-data:
 networks:
