@@ -16,7 +16,7 @@ class Season(models.Model):
     display_number = models.IntegerField()
     blizzard_id = models.IntegerField()
     region = models.CharField(max_length=2)
-    rating_id = models.IntegerField()
+    rating_id = models.IntegerField(null=True, default=None)
 
     def __str__(self):
         return f"{self.region} Season #{self.display_number}"
