@@ -56,8 +56,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://jgagnon-nubuntu:3000',
+    'http://hydro:3000',
 )
 
 ROOT_URLCONF = 'tikilord.urls'
